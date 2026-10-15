@@ -4,7 +4,7 @@
   "name": "Hushlight privacy",
   "version": "0.1.0",
   "author": "Hushlight",
-  "description": "Theme-native microphone, camera, and recording privacy indicators for the Omarchy bar",
+  "description": "A single theme-colored circle for microphone, camera, and recording privacy on the Omarchy bar",
   "kinds": [
     "bar-widget"
   ],
