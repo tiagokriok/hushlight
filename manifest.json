@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "hushlight.privacy",
+  "name": "Hushlight privacy",
+  "version": "0.1.0",
+  "author": "Hushlight",
+  "description": "Theme-native microphone, camera, and recording privacy indicators for the Omarchy bar",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Widget.qml"
+  },
+  "barWidget": {
+    "displayName": "Privacy",
+    "description": "Compact capture indicators using theme colors",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
