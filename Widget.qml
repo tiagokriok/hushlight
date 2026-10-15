@@ -25,16 +25,14 @@ BarWidget {
 
   readonly property string microphoneState: stateOf("microphone")
   readonly property string cameraState: stateOf("camera")
-  readonly property string recordingState: stateOf("recording")
   readonly property bool microphoneActive: microphoneState === "active"
   readonly property bool cameraActive: cameraState === "active"
-  readonly property bool recordingActive: recordingState === "active"
-  readonly property bool anyActive: microphoneActive || cameraActive || recordingActive
+  readonly property bool anyActive: microphoneActive || cameraActive
 
   // ring: microphone only. solid: microphone and camera.
-  // split: system audio or screen recording, alone or with the others.
+  // Omarchy already shows recording on the top bar, so this plugin only marks
+  // microphone and camera access.
   readonly property string mark: {
-    if (recordingActive) return "split"
     if (microphoneActive && cameraActive) return "solid"
     if (microphoneActive) return "ring"
     if (cameraActive) return "camera"
@@ -85,13 +83,12 @@ BarWidget {
     var parts = []
     if (microphoneActive) parts.push(evidenceOf("microphone") || "Microphone")
     if (cameraActive) parts.push(evidenceOf("camera") || "Camera")
-    if (recordingActive) parts.push(evidenceOf("recording") || "Recording")
     return parts.join(" · ")
   }
 
   property bool tooltipHovered: hoverArea.containsMouse
 
-  readonly property real dot: 8
+  readonly property real dot: 12
   implicitWidth: anyActive ? dot + 10 : 0
   implicitHeight: barSize
 
@@ -131,18 +128,9 @@ BarWidget {
     Rectangle {
       anchors.fill: parent
       radius: width / 2
-      color: root.mark === "ring" ? "transparent" : Color.bar.active
+      color: root.mark === "solid" || root.mark === "camera" ? Color.bar.active : "transparent"
       border.width: root.mark === "ring" ? 1.5 : 0
       border.color: Color.bar.active
-    }
-
-    Rectangle {
-      visible: root.mark === "split"
-      anchors.left: parent.left
-      anchors.top: parent.top
-      anchors.bottom: parent.bottom
-      width: parent.width / 2
-      color: Color.bar.background
     }
 
     Rectangle {
