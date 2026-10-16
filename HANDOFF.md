@@ -6,6 +6,8 @@ Theme-native privacy indicators for the Omarchy top bar.
 
 Documentation only. No implementation, dependencies, Git repository, or installed plugin has been created. The next agent should inspect the current Omarchy installation before choosing implementation details. Do not treat earlier feasibility statements as verified detection capabilities.
 
+**Locked product decision:** Hushlight is privacy dots only. Not a macOS camera Control Center. Not Portrait, Studio Light, reactions, backgrounds, live preview, or FaceTime-style call controls.
+
 ## User request and agreed requirements
 
 Create an Omarchy top-bar plugin inspired by macOS privacy indicators:
@@ -18,15 +20,34 @@ Create an Omarchy top-bar plugin inspired by macOS privacy indicators:
 
 The reference was a screenshot describing macOS orange microphone, green camera, and purple recording indicators. Those colors explain the inspiration only; they are not requirements.
 
-The user has requested this project directory and handoff. Implementation has not yet been requested in this session.
+Implementation has not yet been requested.
 
-## UX direction, subject to implementation validation
+## UX direction
 
-Keep the bar presence small, using privacy dots or similarly compact marks. Distinguish microphone, camera, and recording with icons or labels/tooltips, rather than color alone. Theme palettes can contain visually similar colors.
+Keep the bar presence small: dots or similarly compact marks. Distinguish microphone, camera, and recording with shape/icon plus tooltip, not color alone. Hide idle marks if that matches existing Omarchy bar density; do not occupy space when nothing is capturing unless the user asks otherwise.
 
-A click-to-open detail popup showing the responsible applications was suggested, but is not a confirmed requirement. Ask before expanding scope. Do not build a settings system or replace the whole bar.
+A click popup listing apps is optional. Tooltip-only is enough for v1. Do not build a settings panel or replace the whole bar.
 
-Do not confuse idle hardware availability with active capture. Do not imply that an absent indicator proves that no application is recording. Establish and document how unknown status differs from confirmed inactivity.
+Do not confuse idle hardware with active capture. Do not imply that an absent indicator proves nothing is recording.
+
+## Non-goals
+
+- Camera effects pipeline, virtual webcam, OBS filters, OpenEffects
+- Hardware camera LED
+- Location indicator
+- Browser-tab attribution / Chromium companion
+- Rewriting existing plugins in Rust/Go/Zig for its own sake
+
+## Prior art (do not reinvent blindly)
+
+Omarchy already has overlapping plugins. Inspect before writing a new detector:
+
+- [Canary](https://omahub.dev/plugins/melonamin.canary) (`melonamin.canary`): mic, camera, screen; PipeWire plus `/proc` V4L2/ALSA helper; popup and history. Heavier than requested.
+- [omarchy-privacy-dots](https://github.com/devmobasa/omarchy-privacy-dots): mic + Hyprland screencast; camera deliberately omitted.
+- [Snoop-Guard](https://github.com/paolostivanin/Snoop-Guard): C daemon, D-Bus.
+- [Noctalia privacy widget](https://docs.noctalia.dev/noctalia/bar/widgets/privacy/): PipeWire stream-link classification.
+
+Preferred shape if implementing: QML bar widget for theme/UI. Detection via PipeWire registry (event-driven, not `pw-dump` polling). Camera that bypasses PipeWire may need a small same-user `/proc/*/fd` helper; that helper is optional and not a privileged daemon. Language for a helper, if one is required: reuse Python like Canary or write a tiny C/Rust watcher. Do not put ML or video processing in the shell.
 
 ## Omarchy integration already inspected
 
